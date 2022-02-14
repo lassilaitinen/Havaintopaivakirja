@@ -9,7 +9,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -22,17 +21,17 @@
          <children>
             <MenuBar>
                <menus>
-                  <Menu mnemonicParsing="false" text="File">
+                  <Menu fx:id="menuTiedosto" mnemonicParsing="false" text="Tiedosto..">
                      <items>
                         <MenuItem mnemonicParsing="false" text="Close" />
                      </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Edit">
+                  <Menu fx:id="menuMuokkaa" mnemonicParsing="false" text="Muokkaa..">
                      <items>
                         <MenuItem mnemonicParsing="false" text="Delete" />
                      </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Help">
+                  <Menu fx:id="menuApua" mnemonicParsing="false" text="Apua..">
                      <items>
                         <MenuItem mnemonicParsing="false" text="About" />
                      </items>
@@ -52,12 +51,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <TextField>
+                  <TextField fx:id="textHae">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <ComboBox>
+                  <ComboBox fx:id="cboxVEhdot">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
@@ -73,14 +72,7 @@
           <AnchorPane>
                <children>
                   <VBox minWidth="350.0" />
-                  <StringGrid layoutX="1.0" layoutY="-1.0">
-                     <columns>
-                        <TableColumn prefWidth="71.33334350585938" text="Laji" />
-                        <TableColumn prefWidth="75.0" text="Päivämäärä" />
-                        <TableColumn text="Määrä" />
-                        <TableColumn prefWidth="75.0" text="Muuta" />
-                     </columns>
-                  </StringGrid>
+                  <StringGrid layoutX="1.0" layoutY="-1.0" rivit="Laji&#9;|Paikka          &#9;&#9; |Määrä&#9;|Päivämäärä &#9;|Muuta&#10;Sääksi&#9;|Tervo           &#9;&#9;|1&#9;     &#9;|15.6.2020 &#9;|&#10;Sääksi&#9;|Konnevesi     &#9;&#9;|1&#9;      &#9;|25.7.2018 &#9;|&#10;Hirvi&#9;|Halssila   &#9;&#9;      &#9;|1      &#9;|kesä 2017&#9;|&#10;Hauki&#9;|pohjois-Päijänne &#9;|2      &#9;|2.7.2019   &#9;|&#10;Hauki&#9;|Sääksjärvi       &#9;&#9;|1      &#9;|5.7.2021   |" />
                </children>
             </AnchorPane>
           <AnchorPane>
@@ -185,28 +177,35 @@
       </SplitPane>
    </center>
    <bottom>
-      <HBox BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT">
          <children>
-            <Button mnemonicParsing="false" text="Uusi havainto">
+            <Button fx:id="buttonUusiH" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#mouseClicked" text="Uusi havainto">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Poista havainto">
+            <Button fx:id="buttonUusiLaji" mnemonicParsing="false" onMouseClicked="#mouseClicked" text="Lisää laji">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Lisää laji">
+            <HBox alignment="CENTER_RIGHT">
+               <children>
+                  <Button fx:id="buttonPoistaH" alignment="CENTER_RIGHT" mnemonicParsing="false" onMouseClicked="#mouseClicked" text="Poista Havainto">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="buttonPoistaLaji" mnemonicParsing="false" onMouseClicked="#mouseClicked" text="Poista laji">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
                <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets left="325.0" />
                </HBox.margin>
-            </Button>
-            <Button mnemonicParsing="false" text="Poista laji">
-               <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </HBox.margin>
-            </Button>
+            </HBox>
          </children>
       </HBox>
    </bottom>
