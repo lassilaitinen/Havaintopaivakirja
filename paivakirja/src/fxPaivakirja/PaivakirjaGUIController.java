@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import fi.jyu.mit.fxgui.Dialogs;
+import fi.jyu.mit.fxgui.ModalController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -53,8 +54,23 @@ public class PaivakirjaGUIController {
     }
     
     @FXML
+    void keyReleased() {
+        virheilmoitus();
+    }
+    
+    
+    @FXML
     void handeApua() {
         avustus();
+    }
+    
+    @FXML void handleUusiH() {
+        avaa("HavaintoDialogView.fxml", "Havainnon lisäys");
+    }
+
+    @FXML
+    void handleUusiLaji() {
+        avaa("LajiDialogView.fxml", "Lajin lisäys");
     }
 
     
@@ -72,8 +88,14 @@ public class PaivakirjaGUIController {
             return;
         } catch (IOException e) {
             return;
-        }
+        } 
     }
+    
+    private void avaa(String tiedosto, String mitaTehdaan) {
+        ModalController.showModal(PaivakirjaGUIController.class.getResource(tiedosto), mitaTehdaan, null, "");
+    }
+    
+    
     
     
     private void virheilmoitus() {
