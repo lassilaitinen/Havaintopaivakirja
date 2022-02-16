@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPaivakirja.AloitusController">
    <bottom>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -21,12 +20,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <TextField alignment="CENTER_RIGHT" />
+                  <TextField fx:id="textNimi" text="lajit" />
                </children>
             </HBox>
             <HBox alignment="CENTER" minHeight="50.0">
                <children>
-                  <Button mnemonicParsing="false" text="OK">
+                  <Button mnemonicParsing="false" onAction="#handleOK" text="OK">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
@@ -34,7 +33,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Button>
-                  <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Peruuta">
+                  <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handleEi" text="Peruuta">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>

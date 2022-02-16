@@ -30,7 +30,7 @@ public class PaivakirjaMain extends Application {
     }
 
     /**
-     * @param args Ei käytössä
+     * @param args Ei kï¿½ytï¿½ssï¿½
      */
     public static void main(String[] args) {
         launch(args);

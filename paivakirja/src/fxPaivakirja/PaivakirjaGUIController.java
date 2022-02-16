@@ -16,60 +16,46 @@ import javafx.scene.control.TextField;
 
 /**
  * @author lassi
- * @version 20.1.2022
+ * @version 16.2.2022
  *
  */
 public class PaivakirjaGUIController {
 
-    @FXML
-    private Button buttonPoistaH;
+    @FXML private Button buttonPoistaH;
+    @FXML private Button buttonPoistaLaji;
+    @FXML private Button buttonUusiH;
+    @FXML private Button buttonUusiLaji;
+    @FXML private ComboBox<?> cboxVEhdot;
+    @FXML private Menu menuApua;
+    @FXML private Menu menuMuokkaa;
+    @FXML private Menu menuTiedosto;
+    @FXML private TextField textHae;
 
-    @FXML
-    private Button buttonPoistaLaji;
+    @FXML void handlePoistaH() {
+        poista();
+    }
 
-    @FXML
-    private Button buttonUusiH;
-
-    @FXML
-    private Button buttonUusiLaji;
-
-    @FXML
-    private ComboBox<?> cboxVEhdot;
-
-    @FXML
-    private Menu menuApua;
-
-    @FXML
-    private Menu menuMuokkaa;
-
-    @FXML
-    private Menu menuTiedosto;
-
-    @FXML
-    private TextField textHae;
-
-    @FXML
-    void mouseClicked() {
-        virheilmoitus();
+    @FXML void handlePoistaLaji() {
+        poista();
     }
     
-    @FXML
-    void keyReleased() {
-        virheilmoitus();
+    @FXML void keyReleased() {
+        haku();
     }
     
     
-    @FXML
-    void handeApua() {
+    @FXML void handeApua() {
         avustus();
     }
     
+    
     @FXML void handleUusiH() {
+        virheilmoitus();
         avaa("HavaintoDialogView.fxml", "Havainnon lisäys");
     }
 
-    @FXML
-    void handleUusiLaji() {
+    @FXML void handleUusiLaji() {
+        virheilmoitus();
         avaa("LajiDialogView.fxml", "Lajin lisäys");
     }
 
@@ -91,13 +77,35 @@ public class PaivakirjaGUIController {
         } 
     }
     
+    
+    /**
+     *  Avataan haluttu tiedosto/ikkuna
+     * @param tiedosto avattava tiedosto
+     * @param mitaTehdaan mitä avattavalla tiedostolla tehdään
+     */
     private void avaa(String tiedosto, String mitaTehdaan) {
         ModalController.showModal(PaivakirjaGUIController.class.getResource(tiedosto), mitaTehdaan, null, "");
     }
     
     
+    /**
+     * Aliohjelma hakutoimintoa varten
+     */
+    private void haku() {
+        Dialogs.showMessageDialog("Ei osata hakea vielä!");
+    }
+    
+    /**
+     * Aliohjelma poistamista varten
+     */
+    private void poista() {
+        Dialogs.showMessageDialog("Ei osata poistaa vielä!");
+    }
     
     
+    /**
+     * Tulostetaan näyttöön virheilmoitus
+     */
     private void virheilmoitus() {
         Dialogs.showMessageDialog("Ei toimi vielä!");
     }

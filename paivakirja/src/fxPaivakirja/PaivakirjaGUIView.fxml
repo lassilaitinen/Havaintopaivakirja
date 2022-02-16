@@ -179,24 +179,24 @@
    <bottom>
       <HBox alignment="CENTER_LEFT">
          <children>
-            <Button fx:id="buttonUusiH" alignment="CENTER" mnemonicParsing="false" onAction="#handleUusiH" onMouseClicked="#mouseClicked" text="Uusi havainto">
+            <Button fx:id="buttonUusiH" alignment="CENTER" mnemonicParsing="false" onAction="#handleUusiH" text="Uusi havainto">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="buttonUusiLaji" mnemonicParsing="false" onAction="#handleUusiLaji" onMouseClicked="#mouseClicked" text="Lisää laji">
+            <Button fx:id="buttonUusiLaji" mnemonicParsing="false" onAction="#handleUusiLaji" text="Lisää laji">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
             <HBox alignment="CENTER_RIGHT">
                <children>
-                  <Button fx:id="buttonPoistaH" alignment="CENTER_RIGHT" mnemonicParsing="false" onMouseClicked="#mouseClicked" text="Poista Havainto">
+                  <Button fx:id="buttonPoistaH" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handlePoistaH" text="Poista Havainto">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="buttonPoistaLaji" mnemonicParsing="false" onMouseClicked="#mouseClicked" text="Poista laji">
+                  <Button fx:id="buttonPoistaLaji" mnemonicParsing="false" onAction="#handlePoistaLaji" text="Poista laji">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
