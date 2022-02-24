@@ -68,7 +68,7 @@ public class PaivakirjaGUIController {
     private void avustus() {
         Desktop desktop = Desktop.getDesktop();
         try {
-            URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2022k/ht/loklaiti");
+            URI uri = new URI("https://gitlab.jyu.fi/loklaiti/ohj2");
             desktop.browse(uri);
         } catch (URISyntaxException e) {
             return;
