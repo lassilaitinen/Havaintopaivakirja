@@ -43,10 +43,29 @@ public class Havainto {
     /**
      * Aliohjelma antaa havainnolle id-numeron
      * @return Palauttaa havainnon tunnusnumeron
+     * @example
+     * <pre name="test">
+     *   Havainto panda = new Havainto();
+     *   panda.getID() === 0;
+     *   panda.rekisterointi();
+     *   Havainto tiikeri = new Havainto();
+     *   tiikeri.rekisterointi();
+     *   int n1 = panda.getID();
+     *   int n2 = tiikeri.getID();
+     *   n1 === n2-1;
+     * </pre>
      */
     public int rekisterointi() {
         idnro = nextid;
         nextid++;
+        return idnro;
+    }
+    
+    /**
+     * Palauttaa halutun ID:n
+     * @return Palauttaa halutun havainnon ID:n
+     */
+    public int getID() {
         return idnro;
     }
     

@@ -2,6 +2,7 @@ package fxPaivakirja;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -12,6 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.TextField;
+import paivakirja.Havainto;
+import paivakirja.Paivakirja;
+import paivakirja.TilaException;
 
 
 /**
@@ -62,6 +66,8 @@ public class PaivakirjaGUIController {
     
     //--------------------------------------
     
+    private Paivakirja paivakirja;
+    
     /**
      * Näytetään ohjelman suunnitelma erillisessä selaimessa.
      */
@@ -109,5 +115,45 @@ public class PaivakirjaGUIController {
     private void virheilmoitus() {
         Dialogs.showMessageDialog("Ei toimi vielä!");
     }
+    
+    
+    /**
+     * Uuden havainnon lisääminen
+     */
+    protected void uusiHavainto() {
+        Havainto uusi = new Havainto();
+        uusi.rekisterointi();
+        uusi.vastaa();
+        try {
+            paivakirja.lisaa(uusi);
+        } catch (TilaException e) {
+            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+            return;
+        }
+        //TODO: uuden hakemiseen aliohjelma hae(uusi.getID());
+    }
+    
+    
+    /**
+     * Tulostetaan havainto
+     * @param os Mihin tulostetaan
+     * @param havainto Tulostettava havainto
+     */
+    public void tulosta(PrintStream os, final Havainto havainto) {
+        os.println("---------");
+        havainto.tulosta(os);
+        os.println("---------");
+    }
+
+    
+    
+    /**
+     * @param paivakirja Päiväkirja jota käytetään
+     */
+    public void setPaivakirja(Paivakirja paivakirja) {
+        this.paivakirja = paivakirja;
+        // TODO: naytaHavainnot();
+    }
+
 
 }

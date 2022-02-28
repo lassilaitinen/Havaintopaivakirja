@@ -44,6 +44,25 @@ public class Havainnot {
      * Lisää uuden havainnon
      * @param havainto Lisättävän viites
      * @throws TilaException Virheilmoitus, jos tietorakenne täysi
+     * @example
+     * <pre name="test">
+     * #THROWS TilaException 
+     * Havainnot havainnot = new Havainnot();
+     * Havainto panda = new Havainto();
+     * Havainto tiikeri = new Havainto();
+     * havainnot.getLkm() === 0;
+     * havainnot.lisaa(panda); jasenet.getLkm() === 1;
+     * havainnot.lisaa(tiikeri); jasenet.getLkm() === 2;
+     * havainnot.lisaa(tiikeri); jasenet.getLkm() === 3;
+     * havainnot.anna(0) === panda;
+     * havainnot.anna(1) === tiikeri;
+     * havainnot.anna(2) === tiikeri;
+     * havainnot.anna(1) == panda === false;
+     * havainnot.anna(1) == tiikeri === true;
+     * havainnot.anna(3) === panda; #THROWS IndexOutOfBoundsException 
+     * havainnot.lisaa(panda); jasenet.getLkm() === 4;
+     * havainnot.lisaa(tiikeri); jasenet.getLkm() === 5;
+     * </pre>
      */
     public void lisaa(Havainto havainto) throws TilaException{
         if (lkm >= alkiot.length) throw new TilaException("Liian paljon alkioita");

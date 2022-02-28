@@ -39,6 +39,25 @@ public class Paivakirja {
      * Havainnon lisääminen
      * @param havainto Havainto joka lisätään
      * @throws TilaException Virheilmoitus jos ei voida lisätä
+     * @example
+     * <pre name="test">
+     * #THROWS TilaException 
+     * Paivakirja paivakirja = new Paivakirja();
+     * Havainto panda = new Havainto();
+     * Havainto tiikeri = new Havainto();
+     * paivakirja.getLukumaara() === 0;
+     * paivakirja.lisaa(panda); paivakirja.getLukumaara() === 1;
+     * paivakirja.lisaa(tiikeri); paivakirja.getLukumaara() === 2;
+     * paivakirja.lisaa(tiikeri); paivakirja.getLukumaara() === 3;
+     * paivakirja.annaHavainto(0) === panda;
+     * paivakirja.annaHavainto(1) === tiikeri;
+     * paivakirja.annaHavainto(2) === tiikeri;
+     * paivakirja.annaHavainto(1) == panda === false;
+     * paivakirja.annaHavainto(1) == tiikeri === true;
+     * paivakirja.annaHavainto(3) === panda; #THROWS IndexOutOfBoundsException 
+     * paivakirja.lisaa(panda); paivakirja.getLukumaara() === 4;
+     * paivakirja.lisaa(tiikeri); paivakirja.getLukumaara() === 5;
+     * </pre>
      */
     public void lisaa(Havainto havainto) throws TilaException {
         havainnot.lisaa(havainto);

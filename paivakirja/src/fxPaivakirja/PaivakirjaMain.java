@@ -2,6 +2,7 @@ package fxPaivakirja;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import paivakirja.Paivakirja;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
@@ -18,11 +19,13 @@ public class PaivakirjaMain extends Application {
         try {
             FXMLLoader ldr = new FXMLLoader(getClass().getResource("PaivakirjaGUIView.fxml"));
             final Pane root = ldr.load();
-            //final PaivakirjaGUIController paivakirjaCtrl = (PaivakirjaGUIController) ldr.getController();
+            final PaivakirjaGUIController paivakirjaCtrl = (PaivakirjaGUIController) ldr.getController();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("paivakirja.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Paivakirja");
+            Paivakirja paivakirja = new Paivakirja();
+            paivakirjaCtrl.setPaivakirja(paivakirja);
             primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
