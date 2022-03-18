@@ -98,7 +98,7 @@ public class Havainnot {
      * Tallennetan havainnot tiedostoon
      * @throws TilaException jos tallennus ei onnistu
      */
-    public void tallenna() throws TilaException {
+    public void tallennus() throws TilaException {
         throw new TilaException("Ei osata tallentaa tiedostoa: " + tiedosto);
         //TODO: tiedoston tallentaminen
     }

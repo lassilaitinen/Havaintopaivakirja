@@ -24,6 +24,7 @@ package paivakirja;
  */
 public class Paivakirja {
     private final Havainnot havainnot = new Havainnot();
+    private final Lajit lajit = new Lajit();
     
     
     /**
@@ -65,6 +66,15 @@ public class Paivakirja {
     
     
     /**
+     * Lisätään uusi laji
+     * @param otus Lisättävä laji
+     */
+    public void lisaa(Laji otus) {
+        lajit.lisaa(otus);
+    }
+    
+    
+    /**
      * Palauttaa i:n havainnon
      * @param i Monesko havainto halutaan
      * @return Halutun havainnon viite
@@ -76,12 +86,23 @@ public class Paivakirja {
     
     
     /**
+     * Haetaan havainnon lajitiedot
+     * @param havainto Havainto, jonka lajin tiedot haetaan
+     * @return Havainnon lajin tiedot
+     */
+    public Laji annaLaji(Havainto havainto) {
+        return lajit.anna(havainto.getID());
+    }
+    
+    
+    /**
      * Lukee havainnot tiedostosta
      * @param tiedosto Tiedosto
      * @throws TilaException Virheilmoitus jos ei onnistu
      */
     public void lueTiedosto(String tiedosto) throws TilaException {
         havainnot.lueTiedosto(tiedosto);
+        lajit.lueTiedosto(tiedosto);
     }
     
     
@@ -90,7 +111,8 @@ public class Paivakirja {
      * @throws TilaException Virheilmoitus jos tallennus ei onnistu
      */
     public void tallenna() throws TilaException {
-        havainnot.tallenna();
+        havainnot.tallennus();
+        lajit.tallennus();
     }
     
     
@@ -99,18 +121,24 @@ public class Paivakirja {
      */
     public static void main(String[] args) {
         Paivakirja paivakirja = new Paivakirja();
-
-        Havainto hirvi = new Havainto();
-        Havainto kauris = new Havainto();
-            
-        hirvi.rekisterointi();
-        kauris.rekisterointi();
-        hirvi.vastaa();
-        kauris.vastaa();
-            
-        try {   
+        
+        try {
+            Havainto hirvi = new Havainto();
+            Havainto kauris = new Havainto();
+                
+            hirvi.rekisterointi();
+            kauris.rekisterointi();
+            hirvi.vastaa();
+            kauris.vastaa();
+                        
             paivakirja.lisaa(hirvi);
             paivakirja.lisaa(kauris);
+            Laji otus = new Laji();
+            Laji elio = new Laji();
+            otus.vastaa(0);
+            elio.vastaa(1);
+            paivakirja.lisaa(otus);
+            paivakirja.lisaa(elio);
 
             System.out.println("TESTATAAN OHJELMAA:");
 
@@ -118,6 +146,8 @@ public class Paivakirja {
                 Havainto havainto = paivakirja.annaHavainto(i);
                 System.out.println("Havainnon id: " + i);
                 havainto.tulosta(System.out);
+                Laji haluttu = paivakirja.annaLaji(havainto);
+                haluttu.tulosta(System.out);
             }
 
         } catch (TilaException viesti) {

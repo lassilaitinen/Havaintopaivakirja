@@ -29,8 +29,9 @@ import java.io.PrintStream;
 public class Havainto {
     //Havainnon tietokentät attribuutteina:
     private int idnro;
-    private String laji = "";
-    private String paikka = "";
+    //private String laji = " ";
+    private String nimi = " ";
+    private String paikka = " ";
     private int maara = 0;
     private int paiva = 1;
     private int kk = 1;
@@ -61,6 +62,8 @@ public class Havainto {
         return idnro;
     }
     
+
+    
     /**
      * Palauttaa halutun ID:n
      * @return Palauttaa halutun havainnon ID:n
@@ -70,17 +73,27 @@ public class Havainto {
     }
     
     
+    /** Palauttaa halutun havainnon lajin
+     * @return Havainnon laji
+     */
+    public String getLaji() {
+        return nimi;
+    }
+    
+    
     /**
      * Tulostetaan havainnon tiedot
      * @param out Tietovirta johon tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println(String.format("%05d", idnro, 5) + " " + laji);
+        out.println("---------");
+        out.println(String.format("%05d", idnro, 5) + " " + nimi);
         out.println("Paikka: " + paikka);
         out.println("Määrä: " + maara);
         out.println("Päivämäärä :" + paiva + "." + kk + "." + vuosi);
         out.println("Muuta: " + muuta);
-        out.println("---------");
+        
+        
     }
     
     
@@ -97,7 +110,7 @@ public class Havainto {
      * Tehdään testiarvot havainnolle
      */
     public void vastaa() {
-        laji = "sorkkaeläin";
+        nimi = "sorkkaeläin";
         paikka = "metsä";
         maara = 2;
         paiva = 24;
@@ -119,6 +132,8 @@ public class Havainto {
         
         hirvi.vastaa();
         kauris.vastaa();
+        
+        
         
         hirvi.tulosta(System.out);
         kauris.tulosta(System.out);

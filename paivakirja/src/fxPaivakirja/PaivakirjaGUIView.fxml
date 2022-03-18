@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import fi.jyu.mit.fxgui.StringGrid?>
+<?import fi.jyu.mit.fxgui.ComboBoxChooser?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -56,11 +56,11 @@
                         <Insets top="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <ComboBox fx:id="cboxVEhdot">
+                  <ComboBoxChooser fx:id="choiceHav">
                      <HBox.margin>
-                        <Insets top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
-                  </ComboBox>
+                  </ComboBoxChooser>
                </children>
             </HBox>
          </children>
@@ -72,7 +72,7 @@
           <AnchorPane>
                <children>
                   <VBox minWidth="350.0" />
-                  <StringGrid layoutX="1.0" layoutY="-1.0" rivit="Laji&#9;|Paikka          &#9;&#9; |Määrä&#9;|Päivämäärä &#9;|Muuta&#10;Sääksi&#9;|Tervo           &#9;&#9;|1&#9;     &#9;|15.6.2020 &#9;|&#10;Sääksi&#9;|Konnevesi     &#9;&#9;|1&#9;      &#9;|25.7.2018 &#9;|&#10;Hirvi&#9;|Halssila   &#9;&#9;      &#9;|1      &#9;|kesä 2017&#9;|&#10;Hauki&#9;|pohjois-Päijänne &#9;|2      &#9;|2.7.2019   &#9;|&#10;Hauki&#9;|Sääksjärvi       &#9;&#9;|1      &#9;|5.7.2021   |" />
+                  <ScrollPane fx:id="areaHavainnot" layoutX="106.0" layoutY="26.0" prefHeight="252.0" prefWidth="412.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
           <AnchorPane>
@@ -180,11 +180,6 @@
       <HBox alignment="CENTER_LEFT">
          <children>
             <Button fx:id="buttonUusiH" alignment="CENTER" mnemonicParsing="false" onAction="#handleUusiH" text="Uusi havainto">
-               <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="buttonUusiLaji" mnemonicParsing="false" onAction="#handleUusiLaji" text="Lisää laji">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
