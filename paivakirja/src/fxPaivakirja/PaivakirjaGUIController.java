@@ -175,9 +175,13 @@ public class PaivakirjaGUIController implements Initializable{
         hav = new Havainto();
         hav.vastaa();
         hav.rekisterointi();
+        Laji valilaji = new Laji();
+        valilaji.vastaa(0);
+        valilaji.rekisterointi();
         
         try {
             paivakirja.lisaa(hav);
+            paivakirja.lisaa(valilaji);
         } catch (TilaException e) {
             Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
             return;
