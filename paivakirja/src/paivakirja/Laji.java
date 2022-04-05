@@ -6,6 +6,8 @@ package paivakirja;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
 |------------------------------------------------------------------------|
 | Luokan nimi:   Laji                                | Avustajat:        |
@@ -30,8 +32,10 @@ public class Laji {
     private String laji = "";
     private String luokka = "";
     private String uhanalaisuus = "";
-    private int minkoko = 1;
+    /*private int minkoko = 1;
     private int maxkoko = 10;
+    private String yksikko = " ";*/
+    private String koko = "1-10 kg";
     private String tuntomerkit = "";
     private String ravinto = "";
     
@@ -67,16 +71,32 @@ public class Laji {
         return idnro;
     }
     
+    /**
+     * Palauttaa halutun lajin
+     * @return Lajin nimen
+     */
+    public String getLaji() {
+        return laji;
+        //return "Lajia " + nro + " ei löydy";
+    }
+    
+    /** Asettaa lajin
+     * @param nimi Lajin nimi
+     */
+    public void setLaji(String nimi) {
+        this.laji = nimi;
+    }
+    
     
     /**
      * Tulostetaan havainnon tiedot
      * @param out Tietovirta johon tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println(/*String.format("%05d", idnro, 5) + " " +*/ laji);
+        out.println("Laji: " +  laji);
         out.println("Luokka: " + luokka);
         out.println("Uhanalaisuus: " + uhanalaisuus);
-        out.println("Koko :" + minkoko + " - " + maxkoko);
+        out.println("Koko :" + koko);
         out.println("Tuntomerkit: " + tuntomerkit);
         out.println("Ravinto: " + ravinto);
         out.println("---------");
@@ -92,6 +112,49 @@ public class Laji {
     }
     
     
+    private void setID(int nro) {
+        idnro = nro;
+        if (idnro >= nextid) nextid = idnro + 1;
+        
+    }
+    
+    
+    /**
+     * Lajin tiedot merkkijonona tiedostoon tallentamista varten
+     */
+    @Override
+    public String toString() {
+        return "" + getID() + "|" + laji + "|" +
+                luokka + "|" + uhanalaisuus + "|" + 
+                koko + "|" + 
+                tuntomerkit + "|" + ravinto;
+    }
+    
+    
+    /**
+     * selvitetään tiedot merkkijonosta, joka on eroteltu |-merkillä
+     * @param mjono rivi, josta tiedot erotellaan
+     * @example
+     * <pre name="test">
+     * Laji l = new Laji();
+     * l.parse("1   |  Hauki    | Kala");
+     * l.getID() === 1;
+     * l.toString().startsWith("1|Hauki|Kala|") === true;
+     * l.rekisterointi();
+     * </pre>
+     */
+    public void parse(String mjono) {
+        StringBuilder sb = new StringBuilder(mjono);
+        setID(Mjonot.erota(sb, '|', getID()));
+        laji = Mjonot.erota(sb, '|', laji);
+        luokka = Mjonot.erota(sb, '|', luokka);
+        uhanalaisuus = Mjonot.erota(sb, '|', uhanalaisuus);
+        koko = Mjonot.erota(sb, '|', koko);
+        tuntomerkit = Mjonot.erota(sb, '|', tuntomerkit);
+        ravinto = Mjonot.erota(sb, '|', ravinto);
+    }
+    
+    
     /**
      * Tehdään testiarvot havainnolle
      * @param nro Viite, minkä lajin tiedot kyseessä
@@ -101,8 +164,7 @@ public class Laji {
         laji = "sorkkaeläin";
         luokka = "metsä";
         uhanalaisuus = "elinvoimainen";
-        minkoko = 0;
-        maxkoko = 2;
+        koko = "0-2 kg";
         tuntomerkit = "Sarvet päässä";
         ravinto = "Ruoho";
     }

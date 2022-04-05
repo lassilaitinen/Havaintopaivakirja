@@ -42,14 +42,7 @@ public class PaivakirjaGUIController implements Initializable{
     @FXML private Menu menuTiedosto;
     @FXML private TextField textHae;
     @FXML private ScrollPane areaHavainnot;
-    //@FXML private TextArea textHav;
-    
-    /*
-    @Override
-    public void initialize(URL url, ResourceBundle rbundle) {
-        alusta();
-    }
-    */
+
 
     @FXML void handlePoistaH() {
         poista();
@@ -71,11 +64,13 @@ public class PaivakirjaGUIController implements Initializable{
     
     @FXML void handleUusiH() {
         uusiHavainto();
+        tallenna();
         //avaa("HavaintoDialogView.fxml", "Havainnon lisäys");
     }
 
     @FXML void handleUusiLaji() {
         uusiLaji();
+        tallenna();
         //avaa("LajiDialogView.fxml", "Lajin lisäys");
     }
     
@@ -135,14 +130,21 @@ public class PaivakirjaGUIController implements Initializable{
     
     /**
      *  Avataan haluttu tiedosto/ikkuna
-     * @param tiedosto avattava tiedosto
-     * @param mitaTehdaan mitä avattavalla tiedostolla tehdään
+     * @return true jos onnistui
      */
-    /*
-    private void avaa(String tiedosto, String mitaTehdaan) {
-        ModalController.showModal(PaivakirjaGUIController.class.getResource(tiedosto), mitaTehdaan, null, "");
+    public boolean avaa() {
+        lueTied("paivakirja");
+        return true;
     }
-    */
+    
+    
+    private void tallenna() {
+        try {
+            paivakirja.tallenna();
+        } catch (TilaException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+    }
     
     /**
      * Aliohjelma hakutoimintoa varten
@@ -200,7 +202,7 @@ public class PaivakirjaGUIController implements Initializable{
         for (int i = 0; i < paivakirja.getLukumaara(); i++) {
             hav = paivakirja.annaHavainto(i);
             if (hav.getID() == id) index = i;
-            choiceHav.add(""+ i + " " + hav.getLaji(), hav);
+            choiceHav.add(""+ i + " " + hav.getLaji(hav), hav);
         }
         choiceHav.setSelectedIndex(index);
         
@@ -212,14 +214,12 @@ public class PaivakirjaGUIController implements Initializable{
     
     protected void naytaHavainto() {
         hav = choiceHav.getSelectedObject();
-        
-        
+
         if (hav == null) return;
         havArea.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(havArea)) {
-                hav.tulosta(os);
-                Laji haluttu = paivakirja.annaLaji(hav);
-                haluttu.tulosta(os);
+                tulosta(os, hav);
+
             }
     }
     
@@ -251,16 +251,23 @@ public class PaivakirjaGUIController implements Initializable{
     
     
     /**
-     * Luetaan tiedot tiedostosta / TODO: !!
+     * Luetaan tiedot tiedostosta 
      * @param nimi Tiedosto, josta tiedot luetaan
+     * @return virhe jos ei onnistu, muutoin null
      */
-    protected void lueTied(String nimi) {
+    protected String lueTied(String nimi) {
         String tiedosto = nimi;
         setTitle("Havaintopäiväkirja - " + tiedosto);
-        String virhe = "Ei osata vielä";
-        Dialogs.showMessageDialog(virhe);
+        try {
+            paivakirja.lueTiedosto(nimi);
+            hae(0);
+            return null;
+        } catch (TilaException e) {
+            String virhe = "Ei osata vielä";
+            Dialogs.showMessageDialog(virhe);
+            return virhe;
+        }
     }
-    
     
 
     private void setTitle(String nimi) {

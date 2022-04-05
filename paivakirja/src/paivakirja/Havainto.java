@@ -6,6 +6,8 @@ package paivakirja;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * Havainto-luokka
  * |------------------------------------------------------------------------|
@@ -33,11 +35,12 @@ public class Havainto {
     private String nimi = " ";
     private String paikka = " ";
     private int maara = 0;
-    private int paiva = 1;
+    /*private int paiva = 1;
     private int kk = 1;
-    private int vuosi = 2022;
+    private int vuosi = 2022;*/
     private String muuta = "";
     
+    private String pvm = "1.1.2022";
     private static int nextid = 1;
     
     
@@ -74,25 +77,68 @@ public class Havainto {
     
     
     /** Palauttaa halutun havainnon lajin
+     * @param hav haluttu havainto
      * @return Havainnon laji
      */
-    public String getLaji() {
-        return nimi;
+    public String getLaji(Havainto hav) {
+        return hav.nimi;
+    }
+    
+
+    
+    
+    @Override
+    public String toString() {
+        return "" + getID() + "|" + nimi + "|" +
+                paikka + "|" + maara + "|" + 
+                pvm + "|" + muuta;
+    }
+    
+    /**
+     * selvitetään tiedot merkkijonosta, joka on eroteltu |-merkillä
+     * @param mjono rivi, josta tiedot erotellaan
+     * @example
+     * <pre name="test">
+     * Havainto h = new Havainto();
+     * h.parse("1   |  Hauki    | Järvi");
+     * h.getID() === 1;
+     * h.toString().startsWith("1|Hauki|Järvi|") === true;
+     * h.rekisterointi();
+     * </pre>
+     */
+    public void parse(String mjono) {
+        var sb = new StringBuilder(mjono);
+        setID(Mjonot.erota(sb, '|', getID()));
+        nimi = Mjonot.erota(sb, '|', nimi);
+        paikka = Mjonot.erota(sb, '|', paikka);
+        maara = Mjonot.erota(sb, '|', maara);
+        pvm = Mjonot.erota(sb, '|', pvm);
+        muuta = Mjonot.erota(sb, '|', muuta);
     }
     
     
+    private void setID(int nro) {
+        idnro = nro;
+        if (idnro >= nextid) nextid = idnro + 1;
+        
+    }
+
+
+
     /**
      * Tulostetaan havainnon tiedot
      * @param out Tietovirta johon tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println("---------");
-        out.println(String.format("%05d", idnro, 5) + " " + nimi);
+        
+        //StringBuilder n = new StringBuilder(nimi);
+        //nimi = Laji.getLaji(Mjonot.erotaInt(n, idnro));
+        out.println(/*String.format("%05d", idnro, 5) + " " + */"Laji: " + nimi);
         out.println("Paikka: " + paikka);
         out.println("Määrä: " + maara);
-        out.println("Päivämäärä :" + paiva + "." + kk + "." + vuosi);
+        out.println("Päivämäärä :" + pvm);
         out.println("Muuta: " + muuta);
-        
+        out.println("---------");
         
     }
     
@@ -113,9 +159,7 @@ public class Havainto {
         nimi = "sorkkaeläin";
         paikka = "metsä";
         maara = 2;
-        paiva = 24;
-        kk = 2;
-        vuosi = 2022;
+        pvm = "24.2.2022";
         muuta = "Sarvet pudonnut";
     }
 

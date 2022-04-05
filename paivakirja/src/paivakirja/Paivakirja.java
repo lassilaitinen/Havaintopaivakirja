@@ -3,6 +3,8 @@
  */
 package paivakirja;
 
+import java.io.File;
+
 /**
  * Päiväkirja-luokka
  *|------------------------------------------------------------------------|
@@ -23,8 +25,9 @@ package paivakirja;
  *
  */
 public class Paivakirja {
-    private final Havainnot havainnot = new Havainnot();
-    private final Lajit lajit = new Lajit();
+    private Havainnot havainnot = new Havainnot();
+    private Lajit lajit = new Lajit();
+    private String hakemisto = "paivakirja";
     
     
     /**
@@ -91,18 +94,24 @@ public class Paivakirja {
      * @return Havainnon lajin tiedot
      */
     public Laji annaLaji(Havainto havainto) {
-        return lajit.anna(havainto.getID());
+        return lajit.anna(havainto.getLaji(havainto));
     }
     
     
     /**
      * Lukee havainnot tiedostosta
-     * @param tiedosto Tiedosto
+     * @param nimi Tiedosto
      * @throws TilaException Virheilmoitus jos ei onnistu
      */
-    public void lueTiedosto(String tiedosto) throws TilaException {
-        havainnot.lueTiedosto(tiedosto);
-        lajit.lueTiedosto(tiedosto);
+    public void lueTiedosto(String nimi) throws TilaException {
+        File doc = new File(nimi);
+        doc.mkdir();
+        havainnot = new Havainnot();
+        lajit = new Lajit();
+        hakemisto = nimi;
+        
+        havainnot.lueTiedosto(nimi);
+        lajit.lueTiedosto(nimi);
     }
     
     
@@ -111,8 +120,24 @@ public class Paivakirja {
      * @throws TilaException Virheilmoitus jos tallennus ei onnistu
      */
     public void tallenna() throws TilaException {
-        havainnot.tallennus();
-        lajit.tallennus();
+        String virhe = "";
+        
+        // Havaintojen tallentaminen
+        try {
+            havainnot.tallenna(hakemisto);
+        } catch (TilaException e) {
+            virhe = e.getMessage();
+        }
+        
+        // Lajien tallentaminen
+        try {
+            lajit.tallenna(hakemisto);
+        } catch (TilaException e) {
+            virhe += e.getMessage();
+        }
+        
+        if (!"".equals(virhe)) throw new TilaException(virhe);
+        
     }
     
     
@@ -123,14 +148,20 @@ public class Paivakirja {
         Paivakirja paivakirja = new Paivakirja();
         
         try {
-            Havainto hirvi = new Havainto();
-            Havainto kauris = new Havainto();
+            paivakirja.lueTiedosto("paivakirja");
+        } catch (TilaException e) {
+            System.err.println(e.getMessage());
+        }
+        
+        Havainto hirvi = new Havainto();
+        Havainto kauris = new Havainto();
                 
-            hirvi.rekisterointi();
-            kauris.rekisterointi();
-            hirvi.vastaa();
-            kauris.vastaa();
-                        
+        hirvi.rekisterointi();
+        kauris.rekisterointi();
+        hirvi.vastaa();
+        kauris.vastaa();
+        
+        try {                
             paivakirja.lisaa(hirvi);
             paivakirja.lisaa(kauris);
             Laji otus = new Laji();
@@ -140,18 +171,16 @@ public class Paivakirja {
             paivakirja.lisaa(otus);
             paivakirja.lisaa(elio);
 
-            System.out.println("TESTATAAN OHJELMAA:");
-
             for (int i = 0; i < paivakirja.getLukumaara(); i++) {
                 Havainto havainto = paivakirja.annaHavainto(i);
-                System.out.println("Havainnon id: " + i);
                 havainto.tulosta(System.out);
                 Laji haluttu = paivakirja.annaLaji(havainto);
                 haluttu.tulosta(System.out);
             }
+            paivakirja.tallenna();
 
         } catch (TilaException viesti) {
-            System.out.println(viesti.getMessage());
+            System.err.println(viesti.getMessage());
         }
     
     }

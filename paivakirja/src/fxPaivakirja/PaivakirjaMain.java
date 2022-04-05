@@ -1,6 +1,7 @@
 package fxPaivakirja;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import paivakirja.Paivakirja;
 import javafx.scene.Scene;
@@ -27,6 +28,7 @@ public class PaivakirjaMain extends Application {
             Paivakirja paivakirja = new Paivakirja();
             paivakirjaCtrl.setPaivakirja(paivakirja);
             primaryStage.show();
+            if (!paivakirjaCtrl.avaa()) Platform.exit();
         } catch(Exception e) {
             e.printStackTrace();
         }

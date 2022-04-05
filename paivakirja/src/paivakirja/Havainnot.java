@@ -3,6 +3,14 @@
  */
 package paivakirja;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Scanner;
+
 /**
  * Havainnot-luokka
  * |------------------------------------------------------------------------|
@@ -28,8 +36,9 @@ public class Havainnot {
     
     private static final int maxmaara = 50;
     private int lkm = 0;
-    private String tiedosto = "";
+    
     private Havainto alkiot[] = new Havainto[maxmaara];
+    
     
     
     /**
@@ -65,7 +74,7 @@ public class Havainnot {
      * </pre>
      */
     public void lisaa(Havainto havainto) throws TilaException{
-        if (lkm >= alkiot.length) throw new TilaException("Liian paljon alkioita");
+        if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = havainto;
         lkm++;
     }
@@ -86,22 +95,47 @@ public class Havainnot {
     /**
      * @param hakemisto Tiedoston hakemisto
      * @throws TilaException Jos lukeminen epäonnistuu
+     * @example
+     * <pre name="test">
+     * #THROWS TilaException 
+     * #import java.io.File;
+     *  Havainnot h = new Havainnot();
+     *  Havainto kauris = new Havainto(); kauris.vastaa();
+     *  Havainto kauris2 = new Havainto(); kauris2.vastaa();
+     *  Havainto kauris3 = new Havainto(); kauris3.vastaa();
+
+     *  String nimi = "testi";
+     *  File file = new File(tiedNimi + "/havainnot.dat");
+     *  file.delete();
+     *  h.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  h.lisaa(kauris);
+     *  h.lisaa(kauris2);
+     *  h.lisaa(kauris3);
+     *  h.tallenna(nimi);
+     *  h = new Havainnot();
+     *  h.lueTiedostosta(nimi);
+     *  h.lisaa(kauris);
+     *  h.tallenna(nimi);
+     *  file.delete() === true;
+     * </pre>
      */
     public void lueTiedosto(String hakemisto) throws TilaException {
-        tiedosto = hakemisto + "/havainnot.dat";
-        throw new TilaException("Ei osata lukea tiedostoa: " + tiedosto);
-        //TODO: tiedoston lukeminen
+        String nimi = hakemisto + "/havainnot.dat";
+        File file = new File(nimi);
+        try (Scanner fi = new Scanner(new FileInputStream(file))){
+            while (fi.hasNext()) {
+                String n = fi.nextLine();
+                if (n.equals("") || n.charAt(0) == ';') continue;
+                Havainto hav = new Havainto();
+                hav.parse(n);
+                lisaa(hav);
+            }
+        } catch (FileNotFoundException e) {
+            throw new TilaException("Tiedostoa " + nimi + " ei saada luettua");
+        }
     }
     
-    
-    /**
-     * Tallennetan havainnot tiedostoon
-     * @throws TilaException jos tallennus ei onnistu
-     */
-    public void tallennus() throws TilaException {
-        throw new TilaException("Ei osata tallentaa tiedostoa: " + tiedosto);
-        //TODO: tiedoston tallentaminen
-    }
+   
     
     
     /**
@@ -112,13 +146,35 @@ public class Havainnot {
         return lkm;
     }
 
-    
+    /**
+     * @param hakemisto Hakemisto, johon tallennetaan tiedosto
+     * @throws TilaException jos epäonnistuu
+     */
+    public void tallenna(String hakemisto) throws TilaException {
+        //if (!muutettu) return; //TODO: ei tarvitse tallentaa jos ei ole muutettu
+        File file = new File(hakemisto + "/havainnot.dat");
+        try (PrintStream fo = new PrintStream(new FileOutputStream(file, false))){
+            for (int i = 0; i <getLkm(); i++) {
+                Havainto hav = anna(i);
+                fo.println(hav.toString());
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new TilaException("Tiedosto " + file.getAbsolutePath() + " ei aukea");
+        }
+    }
     
     /**
      * @param args ei käytössä
      */
     public static void main(String[] args) {
         Havainnot havainnot = new Havainnot();
+        
+        try {
+            havainnot.lueTiedosto("paivakirja");
+        } catch (TilaException e) {
+           System.err.println(e.getMessage());
+        }
         
         Havainto hirvi = new Havainto();
         Havainto kauris = new Havainto();
@@ -130,19 +186,17 @@ public class Havainnot {
         try {
             havainnot.lisaa(hirvi);
             havainnot.lisaa(kauris);
-
-            System.out.println("TESTATAAN OHJELMAA:");
-
-            for (int i = 0; i < havainnot.getLkm(); i++) {
-                Havainto havainto = havainnot.anna(i);
-                System.out.println("Havainnon id: " + i);
-                havainto.tulosta(System.out);
-            }
-
         } catch (TilaException viesti) {
             System.out.println(viesti.getMessage());
         }
 
+        
+        try {
+            havainnot.tallenna("paivakirja");
+        } catch (TilaException e) {
+            System.err.println(e.getMessage());
+        }
+        
     
     }
 
