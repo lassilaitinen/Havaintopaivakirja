@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPaivakirja.LajiDialogController">
    <center>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <GridPane>
+            <GridPane fx:id="gridLajit">
               <columnConstraints>
                 <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -30,12 +30,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField GridPane.columnIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="editLaji" GridPane.columnIndex="1" />
+                  <TextField fx:id="editLuokka" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="editUhanalaisuus" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="editKoko" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="editTuntomerkit" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="editRavinto" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <Label text="Nimi" />
                   <Label text="Luokka" GridPane.rowIndex="1" />
                   <Label text="Uhanalaisuus" GridPane.rowIndex="2" />
@@ -43,7 +43,7 @@
                   <Label text="Tuntomerkit" GridPane.rowIndex="4" />
                   <Label text="Ravinto" GridPane.rowIndex="5" />
                   <Label text="Muuta" GridPane.rowIndex="6" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="editMuut" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -58,7 +58,12 @@
    <bottom>
       <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
          <children>
-            <Button mnemonicParsing="false" text="OK">
+            <Label fx:id="labelVirhe" text=" ">
+               <HBox.margin>
+                  <Insets right="40.0" />
+               </HBox.margin>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#handleOK" text="OK">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -66,7 +71,7 @@
                   <Insets bottom="2.0" left="2.0" right="5.0" top="2.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Peruuta">
+            <Button mnemonicParsing="false" onAction="#handleCancel" text="Peruuta">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>

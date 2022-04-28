@@ -2,8 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,53 +10,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.jyu.mit.fxgui.ModalController">
-   <center>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Paikka" GridPane.rowIndex="1" />
-            <Label text="Määrä" GridPane.rowIndex="2" />
-            <Label text="Päivämäärä" GridPane.rowIndex="3" />
-            <Label text="Muuta" GridPane.rowIndex="4" />
-            <TextField text="Päijänne" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField text="1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField text="Katiskassa" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="Laji" />
-            <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Uusi laji" textAlignment="CENTER" GridPane.columnIndex="2">
-               <GridPane.margin>
-                  <Insets bottom="2.0" left="5.0" right="2.0" top="2.0" />
-               </GridPane.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Button>
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" />
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-         <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </center>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPaivakirja.HavaintoDialogController">
    <bottom>
       <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="OK">
+            <Label fx:id="labelVirhe" text=" ">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="45.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleOK" text="OK">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -66,7 +27,7 @@
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </HBox.margin>
             </Button>
-            <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Peruuta">
+            <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handleCancel" text="Peruuta">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -83,4 +44,53 @@
          </padding>
       </HBox>
    </bottom>
+   <center>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <GridPane fx:id="gridHavainnot">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Paikka" GridPane.rowIndex="2" />
+                  <Label text="Määrä" GridPane.rowIndex="3" />
+                  <Label text="Päivämäärä" GridPane.rowIndex="4" />
+                  <Label alignment="TOP_LEFT" text="Lisätietoja" GridPane.rowIndex="5" />
+                  <TextField fx:id="editPaikka" text="Päijänne" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="editMaara" text="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label text="Laji" GridPane.rowIndex="1" />
+                  <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Uusi laji" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="2.0" left="5.0" right="2.0" top="2.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Button>
+                  <TextField fx:id="editLaji" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Pyydettiinkö" GridPane.rowIndex="6" />
+                  <TextField fx:id="editPyydettiinko" text="ei" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="editPvm" text="kesä 2017" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="editLaji" text="Hirvi" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField text="syömässä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Label text="Havainnon tiedot" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </HBox>
+   </center>
 </BorderPane>

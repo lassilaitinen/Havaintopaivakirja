@@ -26,21 +26,35 @@ import fi.jyu.mit.ohj2.Mjonot;
  * @version 7.3.2022
  *
  */
-public class Laji {
-    //TODO MUUTA! Lajin tietokentät attribuutteina:
+public class Laji implements Cloneable{
+    //Lajin tietokentät attribuutteina:
     private int idnro;
     private String laji = "";
     private String luokka = "";
     private String uhanalaisuus = "";
-    /*private int minkoko = 1;
-    private int maxkoko = 10;
-    private String yksikko = " ";*/
-    private String koko = "1-10 kg";
+    private String koko = "";
     private String tuntomerkit = "";
     private String ravinto = "";
+    private String pyydettyja = "0";
     
     private static int nextid = 1;
     
+    
+    /**
+     * Muodostaja, jolle tulee parametrinä lajin nimi tai ohje
+     * @param ohje nimi/ohje uudelle lajille
+     */
+    public Laji(String ohje) {
+        laji = ohje;
+    }
+    
+    
+    /**
+     * Muodostaja lajille
+     */
+    public Laji() {
+        //alustettu attribuuteissa
+    }
     
     /**
      * Aliohjelma antaa havainnolle id-numeron
@@ -76,15 +90,93 @@ public class Laji {
      * @return Lajin nimen
      */
     public String getLaji() {
+        Laji apu = new Laji();
+        if (laji == null) return apu.laji;
         return laji;
         //return "Lajia " + nro + " ei löydy";
     }
+    
+    /**
+     * Palauttaa halutun lajin luokan
+     * @return Lajin luokka
+     */
+    public String getLuokka() {
+        return this.luokka;
+    }
+    
+    
+    /**
+     * Palauttaa halutun lajin uhanalaisuuden
+     * @return Lajin uhanalaisuus
+     */
+    public String getUhanalaisuus() {
+        return this.uhanalaisuus;
+    }
+    
+    
+    /**
+     * Palauttaa halutun lajin koon
+     * @return Lajin koko
+     */
+    public String getKoko() {
+        return this.koko;
+    }
+    
+    
+    /**
+     * Palauttaa halutun lajin tuntomerkit
+     * @return Lajin tuntomerkit
+     */
+    public String getTuntomerkit() {
+        return this.tuntomerkit;
+    }
+    
+    
+    /**
+     * Palauttaa halutun lajin ravinnon
+     * @return Lajin ravinto
+     */
+    public String getRavinto() {
+        return this.ravinto;
+    }
+    
+    
+    /**
+     * Palauttaa onko lajia pyydetty
+     * @return Montako pyydetty
+     */
+    public String getPyydettyja() {
+        return this.pyydettyja;
+    }
+    
     
     /** Asettaa lajin
      * @param nimi Lajin nimi
      */
     public void setLaji(String nimi) {
         this.laji = nimi;
+    }
+    
+    
+    /*
+     * Kloonataan laji
+     * @return kloonattu laji
+     */
+    @Override
+    public Laji clone() throws CloneNotSupportedException {
+        Laji uusi;
+        uusi = (Laji) super.clone();
+        return uusi;
+    }
+    
+    
+    /**
+     * Asettaa lajin pyydettyjen määrän oikein
+     */
+    public void setPyydetyt() {
+        int pyydetyt = Mjonot.erotaInt(pyydettyja, 0);
+        pyydetyt++;
+        pyydettyja = "" + pyydetyt;
     }
     
     
@@ -99,6 +191,7 @@ public class Laji {
         out.println("Koko :" + koko);
         out.println("Tuntomerkit: " + tuntomerkit);
         out.println("Ravinto: " + ravinto);
+        out.println("Pyydettyjä: " + pyydettyja);
         out.println("---------");
     }
     
@@ -120,14 +213,101 @@ public class Laji {
     
     
     /**
+     * Palautetaan GridPanen kentän teksti
+     * @param i Minkä kohdan teksti halutaan
+     * @return Haluttu teksti
+     */
+    public String getTeksti(int i) {
+        switch (i) {
+        case 0: return "Lajin tiedot";
+        case 1: return "Lajin nimi:";
+        case 2: return "Luokka:";
+        case 3: return "Uhanalaisuus:";
+        case 4: return "Koko:";
+        case 5: return "Tuntomerkit:";
+        case 6: return "Ravinto:";
+        case 7: return "Pyydettyjä:";
+        default: return "Miten meni noin omasta mielestä?";
+        }
+    }
+    
+    
+    /**
+     * Asetetaan haluttuun kenttään haluttu sisältö
+     * @param i Minkä kentän sisältö asetetaan
+     * @return Haluttu sisältö
+     */
+    public String anna(int i) {
+        switch (i) {
+        case 1: return "" + laji;
+        case 2: return "" + luokka;
+        case 3: return "" + uhanalaisuus;
+        case 4: return "" + koko;
+        case 5: return "" + tuntomerkit;
+        case 6: return "" + ravinto;
+        case 7: return "" + pyydettyja;
+        default: return "Ei onnistu!";
+        }
+    }
+    
+    
+    /**
+     * asettaa lajin tiedon oikealle paikalle
+     * @param i mihin kenttään uusi teksti asetetaan
+     * @param s teksti joka asetetaan
+     * @return virhe, jos ei käy, muutoin null
+     * @example
+     * <pre name="test">
+     * Laji s = new Laji();
+     * s.aseta(1, "panda") === null;
+     * s.aseta(2, " ") === null;
+     * s.aseta(2, "nisäkkäät") === null;
+     * </pre>
+     */
+    public String aseta(int i, String s) {
+        String jono = s.trim();
+        StringBuffer sb = new StringBuffer(jono);
+         switch (i) {
+        case 0:
+            setID(Mjonot.erota(sb, '|', getID()));
+            return null;
+        case 1:
+            laji = jono;
+            return null;
+        case 2:
+            luokka = jono;
+            return null;
+        case 3: 
+            uhanalaisuus = jono;
+            return null;
+        case 4:
+            koko = jono;
+            return null;
+        case 5:
+            tuntomerkit = jono;
+            return null;
+        case 6: 
+            ravinto = jono;
+            return null;
+        case 7:
+            pyydettyja = jono;
+            return null;
+        default:
+            return "Kokeile uudestaan";
+        }
+    }
+    
+    /**
      * Lajin tiedot merkkijonona tiedostoon tallentamista varten
      */
     @Override
     public String toString() {
+        
+        if (laji == null) return getID() + " | | | | | | | ";
         return "" + getID() + "|" + laji + "|" +
                 luokka + "|" + uhanalaisuus + "|" + 
                 koko + "|" + 
-                tuntomerkit + "|" + ravinto;
+                tuntomerkit + "|" + ravinto + "|" + pyydettyja;
     }
     
     
@@ -152,6 +332,7 @@ public class Laji {
         koko = Mjonot.erota(sb, '|', koko);
         tuntomerkit = Mjonot.erota(sb, '|', tuntomerkit);
         ravinto = Mjonot.erota(sb, '|', ravinto);
+        pyydettyja = Mjonot.erota(sb, '|', pyydettyja);
     }
     
     
@@ -167,6 +348,7 @@ public class Laji {
         koko = "0-2 kg";
         tuntomerkit = "Sarvet päässä";
         ravinto = "Ruoho";
+        pyydettyja = "0";
     }
     
 

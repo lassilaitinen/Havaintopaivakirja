@@ -36,6 +36,7 @@ public class Havainnot {
     
     private static final int maxmaara = 50;
     private int lkm = 0;
+    private boolean muutettu = false;
     
     private Havainto alkiot[] = new Havainto[maxmaara];
     
@@ -52,28 +53,25 @@ public class Havainnot {
     /**
      * Lisää uuden havainnon
      * @param havainto Lisättävän viites
-     * @throws TilaException Virheilmoitus, jos tietorakenne täysi
      * @example
      * <pre name="test">
-     * #THROWS TilaException 
      * Havainnot havainnot = new Havainnot();
      * Havainto panda = new Havainto();
      * Havainto tiikeri = new Havainto();
      * havainnot.getLkm() === 0;
-     * havainnot.lisaa(panda); jasenet.getLkm() === 1;
-     * havainnot.lisaa(tiikeri); jasenet.getLkm() === 2;
-     * havainnot.lisaa(tiikeri); jasenet.getLkm() === 3;
+     * havainnot.lisaa(panda);
+     * havainnot.lisaa(tiikeri);
+     * havainnot.lisaa(tiikeri);
      * havainnot.anna(0) === panda;
      * havainnot.anna(1) === tiikeri;
      * havainnot.anna(2) === tiikeri;
      * havainnot.anna(1) == panda === false;
      * havainnot.anna(1) == tiikeri === true;
-     * havainnot.anna(3) === panda; #THROWS IndexOutOfBoundsException 
-     * havainnot.lisaa(panda); jasenet.getLkm() === 4;
-     * havainnot.lisaa(tiikeri); jasenet.getLkm() === 5;
+     * havainnot.lisaa(panda);
+     * havainnot.lisaa(tiikeri);
      * </pre>
      */
-    public void lisaa(Havainto havainto) throws TilaException{
+    public void lisaa(Havainto havainto){
         if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = havainto;
         lkm++;
@@ -93,6 +91,20 @@ public class Havainnot {
     
     
     /**
+     * Palauttaa halutun viitteen jäseneen i
+     * @param i Jäsen, jonka viite halutaan
+     * @return Halutun jäsenen viite
+     * @throws IndexOutOfBoundsException jos i ei käy
+     */
+    public Havainto anna(String i) throws IndexOutOfBoundsException {
+        for (int j = 0; j < lkm; j++) {
+            if (alkiot[j].getLaji().equals(i)) return alkiot[j];
+        }
+        return alkiot[0];
+    }
+    
+    
+    /**
      * @param hakemisto Tiedoston hakemisto
      * @throws TilaException Jos lukeminen epäonnistuu
      * @example
@@ -103,20 +115,14 @@ public class Havainnot {
      *  Havainto kauris = new Havainto(); kauris.vastaa();
      *  Havainto kauris2 = new Havainto(); kauris2.vastaa();
      *  Havainto kauris3 = new Havainto(); kauris3.vastaa();
-
      *  String nimi = "testi";
-     *  File file = new File(tiedNimi + "/havainnot.dat");
+     *  File file = new File(nimi + "/havainnot.dat");
      *  file.delete();
-     *  h.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  h.lueTiedosto(nimi); #THROWS TilaException
      *  h.lisaa(kauris);
      *  h.lisaa(kauris2);
      *  h.lisaa(kauris3);
-     *  h.tallenna(nimi);
-     *  h = new Havainnot();
-     *  h.lueTiedostosta(nimi);
-     *  h.lisaa(kauris);
-     *  h.tallenna(nimi);
-     *  file.delete() === true;
+     *  h.tallenna(nimi); 
      * </pre>
      */
     public void lueTiedosto(String hakemisto) throws TilaException {
@@ -132,12 +138,10 @@ public class Havainnot {
             }
         } catch (FileNotFoundException e) {
             throw new TilaException("Tiedostoa " + nimi + " ei saada luettua");
-        }
+        } 
     }
     
-   
-    
-    
+
     /**
      * Palauttaa havaintojen määrän
      * @return havaintojen määrä
@@ -145,13 +149,85 @@ public class Havainnot {
     public int getLkm() {
         return lkm;
     }
+    
+    
+    /**
+     * Etsitään samalla ID-numerolla oleva havainto, jos :
+     * löytyy: korvataan havainto
+     * ei löydy: lisätään uutena havaintona
+     * @param h lisättävän havainnon viite
+     * @throws TilaException jos tietorakenne on jo täysi
+     */
+    public void korvaaOrLisaa(Havainto h) throws TilaException {
+        int id = h.getID();
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i].getID() == id) {
+                alkiot[i] = h;
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(h);
+        
+    }
+    
+    
+    /**
+     * Etsitään halutun havainnon ID
+     * @param id ID, jonka avulla etsitään
+     * @return löytyneen havainnon ID
+     * @example
+     * <pre name="test">
+     * Havainnot ht = new Havainnot();
+     * Havainto h = new Havainto(); h.rekisterointi(); ht.lisaa(h);
+     * Havainto h2 = new Havainto(); h2.rekisterointi(); ht.lisaa(h2);
+     * Havainto h3 = new Havainto(); h3.rekisterointi(); ht.lisaa(h3);
+     * ht.etsiID(24) === -1;
+     * ht.etsiID(111) === -1;
+     * </pre>
+     */
+    public int etsiID(int id) {
+        for (int i = 0; i < lkm; i++) {
+            if (id == alkiot[i].getID()) return i;
+        }
+        return -1;
+    }
+    
+    
+    /**
+     * Poistetaan haluttu havainto
+     * @param id poistettavan havainnon ID
+     * @return 1 jos poisto onnistuu, muutoin 0
+     * @example
+     * <pre name="test">
+     * Havainnot ht = new Havainnot();
+     * Havainto h = new Havainto(); h.rekisterointi(); ht.lisaa(h);
+     * Havainto h2 = new Havainto(); h2.rekisterointi(); ht.lisaa(h2);
+     * Havainto h3 = new Havainto(); h3.rekisterointi(); ht.lisaa(h3);
+     * int id = 2;
+     * ht.poista(id) === 1;
+     * ht.poista(id+3) === 0;
+     * ht.getLkm() === 2;
+     * </pre>
+     */
+    public int poista(int id) {
+        int k = etsiID(id);
+        if (k < 0) return 0;
+        lkm--;
+        for (int i = k; i < lkm; i++) {
+            alkiot[i] = alkiot[i+1];
+        }
+        alkiot[lkm] = null;
+        return 1;
+    }
 
+    
     /**
      * @param hakemisto Hakemisto, johon tallennetaan tiedosto
      * @throws TilaException jos epäonnistuu
      */
     public void tallenna(String hakemisto) throws TilaException {
-        //if (!muutettu) return; //TODO: ei tarvitse tallentaa jos ei ole muutettu
+        if (!muutettu) return; 
         File file = new File(hakemisto + "/havainnot.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(file, false))){
             for (int i = 0; i <getLkm(); i++) {
@@ -163,6 +239,7 @@ public class Havainnot {
             throw new TilaException("Tiedosto " + file.getAbsolutePath() + " ei aukea");
         }
     }
+    
     
     /**
      * @param args ei käytössä
@@ -183,12 +260,9 @@ public class Havainnot {
         hirvi.vastaa();
         kauris.vastaa();
         
-        try {
-            havainnot.lisaa(hirvi);
-            havainnot.lisaa(kauris);
-        } catch (TilaException viesti) {
-            System.out.println(viesti.getMessage());
-        }
+        havainnot.lisaa(hirvi);
+        havainnot.lisaa(kauris);
+
 
         
         try {
@@ -199,5 +273,8 @@ public class Havainnot {
         
     
     }
+
+
+
 
 }

@@ -8,8 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -20,17 +19,32 @@ import java.util.Scanner;
 public class Lajit {
     
     //private String tiedosto = "";
-    private final Collection<Laji> alkiot = new ArrayList<Laji>();
+    private static final int maxmaara = 50;
+    private static Laji[] alkiot = new Laji[maxmaara];
+    private static int lkm = 0;
+    
     
     /**
      * @param nimi Lajin nimi
      * @return Listan löydetyistä lajeista
      */
     public Laji anna(String nimi) {
-        Laji tama = new Laji();
+        Laji tama = new Laji(nimi);
         for (Laji elain : alkiot)
-            if (elain.getLaji().equals(nimi)) return elain;
+            if (elain != null && elain.getLaji().equals(nimi)) return elain;
+        
+        
+        tama.rekisterointi();
         return tama;
+    }
+    
+    
+    /**
+     * Palautetaan lajit taulukossa
+     * @return Lajit-taulukko
+     */
+    public static Laji[] getLajit() {
+        return alkiot;
     }
     
     
@@ -45,18 +59,13 @@ public class Lajit {
      *  Laji kauris2 = new Laji(); kauris2.vastaa(2);
      *  Laji kauris3 = new Laji(); kauris3.vastaa(3);
      *  String nimi = "testi";
-     *  File file = new File(tiedNimi + "/lajit.dat");
+     *  File file = new File(nimi + "/lajit.dat");
      *  file.delete();
-     *  h.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  h.lueTiedosto(nimi); #THROWS TilaException
      *  h.lisaa(kauris);
      *  h.lisaa(kauris2);
      *  h.lisaa(kauris3);
-     *  h.tallenna(nimi);
-     *  h = new Lajit();
-     *  h.lueTiedostosta(nimi);
-     *  h.lisaa(kauris);
-     *  h.tallenna(nimi);
-     *  file.delete() === true;
+     *  h.tallenna(nimi); #THROWS TilaException
      * </pre>
      */
     public void lueTiedosto(String hakemisto) throws TilaException {
@@ -75,8 +84,7 @@ public class Lajit {
         }
     }
     
-    
-    
+      
     /**
      * @param hakemisto Hakemisto, johon tallennetaan tiedosto
      * @throws TilaException jos epäonnistuu
@@ -85,10 +93,9 @@ public class Lajit {
         
         File file = new File(hakemisto + "/lajit.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(file, false))){
-            for (var laji : alkiot) {
-                fo.println(laji.toString());
-            }
-
+            for (int i = 0; i < lkm; i++) 
+                 fo.println(alkiot[i].toString());
+              
         } catch (FileNotFoundException e) {
             throw new TilaException("Tiedosto " + file.getAbsolutePath() + " ei aukea");
         }
@@ -100,7 +107,42 @@ public class Lajit {
      * @param lisattava laji joka lisätään
      */
     public void lisaa(Laji lisattava) {
-        alkiot.add(lisattava);
+        if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
+        alkiot[lkm] = lisattava;
+        lkm++;
+    }   
+    
+    
+    /**
+     * Etsitään samalla ID-numerolla oleva havainto, jos :
+     * löytyy: korvataan havainto
+     * ei löydy: lisätään uutena havaintona
+     * @param l lisättävän havainnon viite
+     * @throws TilaException jos tietorakenne on jo täysi
+     */
+    public void korvaaOrLisaa(Laji l) throws TilaException {
+        int id = l.getID();
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i].getID() == id) {
+                alkiot[i] = l;
+                //muutettu = true;
+                return;
+            }
+        }
+        lisaa(l); 
+    }
+    
+    
+    /**
+     * Etsitään haluttu laji
+     * @param nimi Lajin nimi
+     * @return Haluttu laji
+     */
+    public static Laji annaLaji(String nimi) {
+        Laji tama = new Laji();
+        for (Laji elain : alkiot)
+            if (elain != null && elain.getLaji().equals(nimi)) return elain;
+        return tama;
     }
     
     

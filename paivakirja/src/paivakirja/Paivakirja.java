@@ -89,6 +89,19 @@ public class Paivakirja {
     
     
     /**
+     * Poistetaan haluttu havainto
+     * @param h Havainto joka halutaan poistaa
+     * @return Poistetun havainnon ID
+     */
+    public int poista(Havainto h) {
+        if (h == null) return 0;
+        int k = havainnot.poista(h.getID());
+        
+        return k;
+    }
+
+    
+    /**
      * Haetaan havainnon lajitiedot
      * @param havainto Havainto, jonka lajin tiedot haetaan
      * @return Havainnon lajin tiedot
@@ -136,7 +149,32 @@ public class Paivakirja {
             virhe += e.getMessage();
         }
         
-        if (!"".equals(virhe)) throw new TilaException(virhe);
+        if (!"".equals(virhe)) throw new TilaException(virhe);  
+    }
+    
+    
+    /**
+     * Etsitään samalla ID-numerolla oleva havainto, jos :
+     * löytyy: korvataan havainto
+     * ei löydy: lisätään uutena havaintona
+     * @param h lisättävän havainnon viite
+     * @throws TilaException jos tietorakenne on jo täysi
+     */
+    public void korjaaOrLisaa(Havainto h) throws TilaException{
+        havainnot.korvaaOrLisaa(h);
+        
+    }
+    
+    
+    /**
+     * Etsitään samalla ID-numerolla oleva havainto, jos :
+     * löytyy: korvataan havainto
+     * ei löydy: lisätään uutena havaintona
+     * @param l lisättävän havainnon viite
+     * @throws TilaException jos tietorakenne on jo täysi
+     */
+    public void korjaaOrLisaa(Laji l) throws TilaException{
+        lajit.korvaaOrLisaa(l);
         
     }
     
@@ -184,5 +222,8 @@ public class Paivakirja {
         }
     
     }
+
+
+
 
 }

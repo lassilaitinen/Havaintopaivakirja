@@ -7,12 +7,14 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPaivakirja.PaivakirjaGUIController">
@@ -23,17 +25,20 @@
                <menus>
                   <Menu fx:id="menuTiedosto" mnemonicParsing="false" text="Tiedosto..">
                      <items>
+                        <MenuItem fx:id="menuTallenna" mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" />
+                        <MenuItem fx:id="menuTulosta" mnemonicParsing="false" onAction="#handleTulosta" text="Tulosta" />
                         <MenuItem mnemonicParsing="false" text="Close" />
                      </items>
                   </Menu>
                   <Menu fx:id="menuMuokkaa" mnemonicParsing="false" text="Muokkaa..">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
+                        <MenuItem fx:id="menuMuokkaaH" mnemonicParsing="false" onAction="#handleMuokkaaH" text="Muokkaa havaintoa" />
+                        <MenuItem fx:id="menuMuokkaaL" mnemonicParsing="false" onAction="#handleMuokkaaL" text="Muokkaa lajia" />
                      </items>
                   </Menu>
                   <Menu fx:id="menuApua" mnemonicParsing="false" onAction="#handeApua" text="Apua..">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" text="Infoa" />
                      </items>
                   </Menu>
                </menus>
@@ -51,7 +56,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="textHae" onKeyReleased="#keyReleased">
+                  <TextField fx:id="textHae" onAction="#handleHaku" onKeyReleased="#keyReleased">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
@@ -71,97 +76,151 @@
         <items>
           <AnchorPane>
                <children>
-                  <VBox minWidth="350.0" />
-                  <ScrollPane fx:id="areaHavainnot" layoutX="106.0" layoutY="26.0" prefHeight="252.0" prefWidth="412.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
-          <AnchorPane>
-               <children>
-                  <VBox spacing="2.0">
+                  <VBox />
+                  <GridPane fx:id="gridHavainnot" layoutX="28.0" layoutY="21.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
                      <children>
-                        <Label text="Lajin tiedot">
+                        <Label text="Havainnon tiedot">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </Label>
-                        <HBox>
+                        <Label minWidth="100.0" text="Laji" GridPane.rowIndex="1">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="editLaji" text="Hirvi" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label minWidth="100.0" text="Paikka" GridPane.rowIndex="2">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="editPaikka" text="Jyväskylä" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label minWidth="100.0" text="Määrä" GridPane.rowIndex="3">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="editMaara" text="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label minWidth="100.0" text="Päivämäärä" GridPane.rowIndex="4">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="editPvm" text="kesä 2017" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label minWidth="100.0" text="Lisätietoja" GridPane.rowIndex="5">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="editLisat" text="Syömässä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label minWidth="100.0" text="Pyydettiinkö" GridPane.rowIndex="6">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="editPyydettiinko" text="ei" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane prefWidth="177.0">
+               <children>
+                  <VBox spacing="2.0">
+                     <children>
+                        <GridPane fx:id="gridLajit">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <Label minWidth="100.0" text="Nimi">
+                              <Label text="Lajin tiedot">
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <Label minWidth="100.0" text="Nimi" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                              <TextField text="Hirvi">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </TextField>
+                              <TextField fx:id="editNimi" text="Hirvi" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label minWidth="100.0" text="Luokka" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="editLuokka" text="Nisäkkäät" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label minWidth="100.0" text="Uhanalaisuus" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="editUhanalaisuus" text="Elinvoimainen" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label minWidth="100.0" text="Koko" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="editKoko" text="1.4 - 2.1 m" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label minWidth="100.0" text="Tuntomerkkejä" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="editTuntomerkit" text="Urkoksella sarvet" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label minWidth="100.0" text="Ravinto" GridPane.rowIndex="6">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="editRavinto" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label minWidth="100.0" text="Pyydetty" GridPane.rowIndex="7">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="15.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="editPyydettyja" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                            </children>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </GridPane>
+                        <HBox>
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                         </HBox>
-                        <HBox>
-                           <children>
-                              <Label minWidth="100.0" text="Luokka">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                              <TextField text="Nisäkkäät" />
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Label minWidth="100.0" text="Uhanalaisuus">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                              <TextField text="Elinvoimainen" />
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Label minWidth="100.0" text="Koko">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                              <TextField text="1.4 - 2.1 m" />
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Label minWidth="100.0" text="Tuntomerkkejä">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                              <TextField text="Urkoksella sarvet" />
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Label minWidth="100.0" text="Havaintoja">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                              <TextField />
-                           </children>
-                        </HBox>
                         <HBox />
-                        <HBox layoutX="10.0" layoutY="187.0">
-                           <children>
-                              <Label minWidth="100.0" text="Pyydetty">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                              <TextField />
-                           </children>
-                        </HBox>
+                        <HBox />
+                        <HBox />
+                        <HBox />
+                        <HBox />
+                        <HBox />
+                        <HBox layoutX="10.0" layoutY="187.0" />
                         <HBox layoutX="10.0" layoutY="187.0" />
                      </children>
                      <opaqueInsets>
@@ -187,11 +246,6 @@
             <HBox alignment="CENTER_RIGHT">
                <children>
                   <Button fx:id="buttonPoistaH" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handlePoistaH" text="Poista Havainto">
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="buttonPoistaLaji" mnemonicParsing="false" onAction="#handlePoistaLaji" text="Poista laji">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
