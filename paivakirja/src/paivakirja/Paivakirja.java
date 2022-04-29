@@ -27,7 +27,7 @@ import java.io.File;
 public class Paivakirja {
     private Havainnot havainnot = new Havainnot();
     private Lajit lajit = new Lajit();
-    private String hakemisto = "paivakirja";
+    private String hakemisto = "";
     
     
     /**
@@ -186,7 +186,7 @@ public class Paivakirja {
         Paivakirja paivakirja = new Paivakirja();
         
         try {
-            paivakirja.lueTiedosto("paivakirja");
+            paivakirja.lueTiedosto("");
         } catch (TilaException e) {
             System.err.println(e.getMessage());
         }
